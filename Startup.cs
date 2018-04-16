@@ -1,10 +1,22 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json;
+using System.IO;
+using System.Net;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using VotingApp.BLL;
+using VotingApp.BLL.Users;
+using VotingApp.DAL;
 
-namespace voting_app
+namespace VotingAppWeb
 {
     public class Startup
     {
@@ -20,6 +32,26 @@ namespace voting_app
         {
             services.AddMvc();
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options => {
+                options.Events.OnRedirectToLogin = (context) =>
+                {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+            });
+
+            var dataPath = Path.Combine(Directory.GetCurrentDirectory(), "appData");
+            Directory.CreateDirectory(dataPath);
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(dataPath));
+
+            services.AddTransient<IRepository<User>, UserRepository>();
+            services.AddTransient<IUserService, UserService>();
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -30,14 +62,22 @@ namespace voting_app
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            app.UseExceptionHandler(builder =>
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+                builder.Run(async context =>
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+
+                    var error = context.Features.Get<IExceptionHandlerFeature>();
+
+                    if (error != null)
+                    {
+                        string errorMsg = JsonConvert.SerializeObject(new { message = error.Error.Message });
+                        await context.Response.WriteAsync(errorMsg).ConfigureAwait(false);
+                    }
+                });
+            });
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
@@ -58,6 +98,10 @@ namespace voting_app
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            app.UseAuthentication();
+
+            
         }
     }
 }

@@ -4,19 +4,19 @@ export default class SignUp extends Component {
   render() {
     return (
       <form>
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="email" class="form-control" id="name" />
+        <div className="form-group">
+          <label htmlFor="name">Name</label>
+          <input type="email" className="form-control" id="name" />
         </div>
-        <div class="form-group">
-          <label for="inputEmail">Email address</label>
-          <input type="email" class="form-control" id="inputEmail" />
+        <div className="form-group">
+          <label htmlFor="inputEmail">Email address</label>
+          <input type="email" className="form-control" id="inputEmail" />
         </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" id="password" />
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input type="password" className="form-control" id="password" />
         </div>
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" className="btn btn-primary">
           Sign up
         </button>
       </form>

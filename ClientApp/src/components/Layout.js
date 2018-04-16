@@ -5,10 +5,13 @@ export class Layout extends Component {
   displayName = Layout.name;
 
   render() {
+    const { user, onUserLogOut } = this.props;
     return (
       <Fragment>
         <nav className="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-          <a className="navbar-brand">Voting</a>
+          <a className="navbar-brand" href="void:0">
+            Voting
+          </a>
           <button
             className="navbar-toggler"
             type="button"
@@ -29,13 +32,46 @@ export class Layout extends Component {
                 </NavLink>
               </li>
             </ul>
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <NavLink className="nav-link" exact to="/signup">
-                  <i className="fa fa-home" /> Sign Up
-                </NavLink>
-              </li>
-            </ul>
+            {user ? (
+              <Fragment>
+                <ul className="navbar-nav ml-auto">
+                  <li>
+                    <span className="navbar-text">Hello, {user.userName}</span>{' '}
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      exact
+                      to={`/users/${user.id}`}
+                    >
+                      <i className="fa fa-cog" />
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className="nav-link"
+                      href="void:0"
+                      onClick={() => onUserLogOut()}
+                    >
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+              </Fragment>
+            ) : (
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <NavLink className="nav-link" exact to="/signup">
+                    Sign Up
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" exact to="/login">
+                    Login
+                  </NavLink>
+                </li>
+              </ul>
+            )}
           </div>
         </nav>
 
