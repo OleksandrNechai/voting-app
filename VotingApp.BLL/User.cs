@@ -4,9 +4,13 @@ using System.Text;
 
 namespace VotingApp.BLL
 {
-    public class User
+    public interface IEntity
     {
-        public string Id { get; set; }
+        Guid Id { get; set; }
+    }
+    public class User : IEntity
+    {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

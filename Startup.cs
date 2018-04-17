@@ -10,9 +10,9 @@ using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using System.IO;
 using System.Net;
-using System.Net.Mime;
 using System.Threading.Tasks;
 using VotingApp.BLL;
+using VotingApp.BLL.Polls;
 using VotingApp.BLL.Users;
 using VotingApp.DAL;
 
@@ -37,7 +37,8 @@ namespace VotingAppWeb
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }).AddCookie(options => {
+            }).AddCookie(options =>
+            {
                 options.Events.OnRedirectToLogin = (context) =>
                 {
                     context.Response.StatusCode = 401;
@@ -49,8 +50,14 @@ namespace VotingAppWeb
             Directory.CreateDirectory(dataPath);
             services.AddSingleton<IFileProvider>(new PhysicalFileProvider(dataPath));
 
-            services.AddTransient<IRepository<User>, UserRepository>();
+            services.AddTransient<IRepository<User>>(
+                c => new Repository<User>(c.GetRequiredService<IFileProvider>(), "users.json"));
+
+            services.AddTransient<IRepository<Poll>>(
+                c => new Repository<Poll>(c.GetRequiredService<IFileProvider>(), "polls.json"));
+
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPollService, PollService>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -101,7 +108,7 @@ namespace VotingAppWeb
 
             app.UseAuthentication();
 
-            
+
         }
     }
 }

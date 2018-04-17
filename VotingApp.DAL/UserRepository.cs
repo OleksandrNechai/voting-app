@@ -9,41 +9,46 @@ using System.Linq;
 
 namespace VotingApp.DAL
 {
-    public class UserRepository : IRepository<User>
+    public class Repository<T> : IRepository<T> where T : IEntity
     {
-        public UserRepository(IFileProvider provider)
+        public Repository(IFileProvider provider, string fileName)
         {
-            FilePath = provider.GetFileInfo("users.json").PhysicalPath;
+            FilePath = provider.GetFileInfo(fileName).PhysicalPath;
         }
 
         private string FilePath { get; }
 
-        public void Add(User entity)
+        public void Add(T entity)
         {
-            WriteUsers(GetUsers().Concat(new[] { entity }));
+            Write(Read().Concat(new[] { entity }));
         }
 
-        public IEnumerable<User> All()
+        public IEnumerable<T> All()
         {
-            return GetUsers();
+            return Read();
         }
 
-        public IEnumerable<User> Find(Expression<Func<User, bool>> predicate)
+        public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
             return All().Where(predicate.Compile());
         }
 
-        public void Remove(User entity)
+        public void Remove(T entity)
         {
-            WriteUsers(GetUsers().Where(e => e.Id != entity.Id));
+            Write(Read().Where(e => e.Id != entity.Id));
         }
 
-        private List<User> GetUsers()
+        private List<T> Read()
         {
-            return JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(FilePath));
+            if (!File.Exists(FilePath))
+            {
+                File.WriteAllText(FilePath, "[]");
+            }
+
+            return JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(FilePath));
         }
 
-        private void WriteUsers(IEnumerable<User> users)
+        private void Write(IEnumerable<T> users)
         {
             File.WriteAllText(FilePath, JsonConvert.SerializeObject(users, Formatting.Indented));
         }
