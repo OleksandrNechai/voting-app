@@ -25,17 +25,21 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="appData\**" />
     <Compile Remove="VotingApp.BLL\**" />
     <Compile Remove="VotingApp.DAL\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="appData\**" />
     <Content Remove="VotingApp.BLL\**" />
     <Content Remove="VotingApp.DAL\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup> 
 
   <ItemGroup>
+    <EmbeddedResource Remove="appData\**" />
     <EmbeddedResource Remove="VotingApp.BLL\**" />
     <EmbeddedResource Remove="VotingApp.DAL\**" />
+    <None Remove="appData\**" />
     <None Remove="VotingApp.BLL\**" />
     <None Remove="VotingApp.DAL\**" />
   </ItemGroup> 

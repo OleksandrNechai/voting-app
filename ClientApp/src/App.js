@@ -35,19 +35,19 @@ class App extends Component {
   }
 
   render() {
-    console.log('render App');
+    const { user } = this.state;
     if (this.state.isLoading)
       return <h1 style={{ textAlign: 'center' }}>Loading...</h1>;
 
     return (
-      <Layout user={this.state.user} onUserLogOut={this.handleLogout}>
+      <Layout user={user} onUserLogOut={this.handleLogout}>
         <Switch>
           <Route
             exact
             path="/login"
             render={() =>
-              this.state.user ? (
-                <Dashboard />
+              user ? (
+                <Dashboard user={user} />
               ) : (
                 <Login onUserLoggedIn={this.handleLogin} />
               )
@@ -56,12 +56,12 @@ class App extends Component {
           <Route
             exact
             path="/signup"
-            render={() => (this.state.user ? <Dashboard /> : <SignUp />)}
+            render={() => (user ? <Dashboard user={user} /> : <SignUp />)}
           />
           <Route
             exact
             path="/"
-            render={() => (this.state.user ? <Dashboard /> : <Home />)}
+            render={() => (user ? <Dashboard user={user} /> : <Home />)}
           />
           <Redirect to="/" />
         </Switch>
