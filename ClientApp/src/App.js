@@ -14,7 +14,7 @@ class App extends Component {
 
   handleLogin = user => {
     this.setState({ user });
-    this.props.history.push(`/users/${user.id}`);
+    this.props.history.push('/');
   };
 
   handleLogout = () => {
@@ -56,7 +56,13 @@ class App extends Component {
           <Route
             exact
             path="/signup"
-            render={() => (user ? <Dashboard user={user} /> : <SignUp />)}
+            render={() =>
+              user ? (
+                <Dashboard user={user} />
+              ) : (
+                <SignUp onUserLoggedIn={this.handleLogin} />
+              )
+            }
           />
           <Route
             exact
