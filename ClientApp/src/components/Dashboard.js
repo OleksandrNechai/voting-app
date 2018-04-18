@@ -3,8 +3,10 @@ import PollEditor from './PollEditor';
 
 export default class Dashboard extends Component {
   render() {
+    const { id } = this.props.match.params;
     return (
       <div style={{ textAlign: 'center' }}>
+        <p>User id: {id}</p>
         <h1>DASHBOARD</h1>
         <h4>What would you like to do today?</h4>
         <div className="btn-group btn-group-toggle" data-toggle="buttons">

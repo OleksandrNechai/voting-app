@@ -14,7 +14,6 @@ class App extends Component {
 
   handleLogin = user => {
     this.setState({ user });
-    this.props.history.push('/');
   };
 
   handleLogout = () => {
@@ -24,6 +23,7 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this.setState({ isLoading: true });
     api
       .get('api/login')
       .then(user => {
@@ -34,43 +34,39 @@ class App extends Component {
       .finally(() => this.setState({ isLoading: false }));
   }
 
+  knownUserRouts = user => (
+    <Switch>
+      <Route exact path={'/dashboard/:id'} component={Dashboard} />
+      <Redirect to={`/dashboard/${user.id}`} />
+    </Switch>
+  );
+
+  anonymousUserRouts = () => (
+    <Switch>
+      <Route
+        exact
+        path="/login"
+        render={() => <Login onUserLoggedIn={this.handleLogin} />}
+      />
+      <Route
+        exact
+        path="/signup"
+        render={() => <SignUp onUserLoggedIn={this.handleLogin} />}
+      />
+      <Route exact path="/" component={Home} />
+      <Redirect to="/" />
+    </Switch>
+  );
+
   render() {
     const { user } = this.state;
+
     if (this.state.isLoading)
       return <h1 style={{ textAlign: 'center' }}>Loading...</h1>;
 
     return (
       <Layout user={user} onUserLogOut={this.handleLogout}>
-        <Switch>
-          <Route
-            exact
-            path="/login"
-            render={() =>
-              user ? (
-                <Dashboard user={user} />
-              ) : (
-                <Login onUserLoggedIn={this.handleLogin} />
-              )
-            }
-          />
-          <Route
-            exact
-            path="/signup"
-            render={() =>
-              user ? (
-                <Dashboard user={user} />
-              ) : (
-                <SignUp onUserLoggedIn={this.handleLogin} />
-              )
-            }
-          />
-          <Route
-            exact
-            path="/"
-            render={() => (user ? <Dashboard user={user} /> : <Home />)}
-          />
-          <Redirect to="/" />
-        </Switch>
+        {user ? this.knownUserRouts(user) : this.anonymousUserRouts()}
       </Layout>
     );
   }
