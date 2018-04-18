@@ -40,7 +40,7 @@ export function remove(url) {
 function handleResponse(response) {
   const contentType = response.headers.get('content-type');
   const noContent = response.headers.get('content-length') === '0';
-  if (noContent) {
+  if (noContent || !contentType) {
     return handleNoContentResponse(response);
   }
   if (contentType.includes('application/json')) {
