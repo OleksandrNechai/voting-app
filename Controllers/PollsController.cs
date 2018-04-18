@@ -23,7 +23,7 @@ namespace VotingApp.Web.Controllers
         }
 
         // GET: api/Polls/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public string Get(int id)
         {
             return "poll";

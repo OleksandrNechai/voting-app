@@ -7,8 +7,8 @@ export default class Dashboard extends Component {
       <div style={{ textAlign: 'center' }}>
         <h1>DASHBOARD</h1>
         <h4>What would you like to do today?</h4>
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-secondary btn-lg active">
+        <div className="btn-group btn-group-toggle" data-toggle="buttons">
+          <label className="btn btn-secondary btn-lg active">
             <input
               type="radio"
               name="options"
@@ -18,7 +18,7 @@ export default class Dashboard extends Component {
             />{' '}
             New Poll
           </label>
-          <label class="btn btn-lg btn-secondary">
+          <label className="btn btn-lg btn-secondary">
             <input
               type="radio"
               name="options"

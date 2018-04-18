@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -17,6 +19,25 @@ namespace VotingApp.BLL.Users
         public IEnumerable<User> GetUsersWithName(string name)
         {
             return Repo.Find(user => user.Name == name);
+        }
+
+        public IEnumerable<User> GetUsersWithId(Guid id)
+        {
+            return Repo.Find(user => user.Id.Equals(id));
+        }
+
+        public IEnumerable<User> GetAllUsers()
+        {
+            return Repo.All();
+        }
+
+        public User RegisterUser(User user)
+        {
+            var userToSave = user.WithId(Guid.NewGuid()).WithPassword(GetHashForPassword(user.Password));
+            if(GetUsersWithName(userToSave.Name).Any())
+                throw new ApplicationException("User with such name already exists");
+            Repo.Add(userToSave);
+            return userToSave;
         }
 
         public string GetHashForPassword(string password)
