@@ -31,7 +31,7 @@ class App extends Component {
           this.handleLogin(user);
         }
       })
-      .finally(() => this.setState({ isLoading: false }));
+      .then(() => this.setState({ isLoading: false }));
   }
 
   knownUserRouts = user => (

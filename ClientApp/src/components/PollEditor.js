@@ -6,7 +6,7 @@ export default class PollEditor extends Component {
       <div className="mt-4">
         <h2>New Poll</h2>
         <div className="form-group">
-          <label for="pollName">Name your poll</label>
+          <label htmlFor="pollName">Name your poll</label>
           <input
             type="text"
             className="form-control"

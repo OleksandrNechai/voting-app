@@ -1,4 +1,5 @@
 // Inspired by https://css-tricks.com/using-fetch/
+import fetch from 'isomorphic-fetch';
 
 const commonSettings = {
   headers: {
