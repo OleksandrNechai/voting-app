@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -50,17 +51,14 @@ namespace VotingApp.Web.Controllers
         [AllowAnonymous]
         public IActionResult Get()
         {
-            if (User.Identity.Name != null)
+            if (User.Identity.Name == null) return Ok();
+            var aligibleUsers = UserService.GetUsersWithName(User.Identity.Name).ToList();
+            if (!aligibleUsers.Any())
             {
-                var aligibleUsers = UserService.GetUsersWithName(User.Identity.Name);
-                if (!aligibleUsers.Any())
-                {
-                    return Ok();
-                }
-                var user = aligibleUsers.First();
-                return Ok(new { user.Id, user.Email, UserName = user.Name });
+                return Ok();
             }
-            return Ok();
+            var user = aligibleUsers.First();
+            return Ok(new { user.Id, user.Email, UserName = user.Name });
         }
 
         [HttpPost("api/logout")]

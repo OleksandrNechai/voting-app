@@ -10,7 +10,11 @@ import * as api from './api';
 
 class App extends Component {
   displayName = App.name;
-  state = { user: undefined, isLoading: true };
+  state = {
+    user: undefined,
+    isLoading: true,
+    error: '',
+  };
 
   handleLogin = user => {
     this.setState({ user });
@@ -31,6 +35,7 @@ class App extends Component {
           this.handleLogin(user);
         }
       })
+      .catch(e => this.setState({ error: e.message }))
       .then(() => this.setState({ isLoading: false }));
   }
 
@@ -59,13 +64,18 @@ class App extends Component {
   );
 
   render() {
-    const { user } = this.state;
+    const { user, error } = this.state;
 
     if (this.state.isLoading)
       return <h1 style={{ textAlign: 'center' }}>Loading...</h1>;
 
     return (
       <Layout user={user} onUserLogOut={this.handleLogout}>
+        {error ? (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        ) : null}
         {user ? this.knownUserRouts(user) : this.anonymousUserRouts()}
       </Layout>
     );
