@@ -47,12 +47,8 @@ export class Layout extends Component {
                       <i className="fa fa-cog" />
                     </NavLink>
                   </li>
-                  <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      href="void:0"
-                      onClick={() => onUserLogOut()}
-                    >
+                  <li className="nav-item" style={{ cursor: 'pointer' }}>
+                    <a className="nav-link" onClick={() => onUserLogOut()}>
                       Logout
                     </a>
                   </li>
