@@ -10,6 +10,7 @@ namespace VotingApp.BLL.Users
         IEnumerable<User> GetUsersWithId(Guid id);
         IEnumerable<User> GetAllUsers();
         User RegisterUser(User user);
+        void ChangePassword(Guid id, string oldPassword, string newPassword);
         string GetHashForPassword(string password);
     }
 }

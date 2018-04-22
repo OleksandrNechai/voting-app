@@ -48,9 +48,18 @@ namespace VotingApp.Web.Controllers
         }
         
         // PUT: api/Users/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPut("{id}/{oldPassword}/{newPassword}")]
+        public IActionResult Put(Guid id, string oldPassword, string newPassword)
         {
+            try
+            {
+                UserService.ChangePassword(id, oldPassword, newPassword);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
         // DELETE: api/ApiWithActions/5

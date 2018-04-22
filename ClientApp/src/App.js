@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import Login from './auth/Login';
 import { withRouter } from 'react-router-dom';
 import * as api from './api';
+import ChangePassword from './components/ChangePassword';
 
 class App extends Component {
   displayName = App.name;
@@ -41,6 +42,7 @@ class App extends Component {
 
   knownUserRouts = user => (
     <Switch>
+      <Route exact path={'/change-password/:id'} component={ChangePassword} />
       <Route exact path={'/dashboard/:id'} component={Dashboard} />
       <Redirect to={`/dashboard/${user.id}`} />
     </Switch>

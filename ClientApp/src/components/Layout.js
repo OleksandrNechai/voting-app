@@ -42,7 +42,7 @@ export class Layout extends Component {
                     <NavLink
                       className="nav-link"
                       exact
-                      to={`/users/${user.id}`}
+                      to={`/change-password/${user.id}`}
                     >
                       <i className="fa fa-cog" />
                     </NavLink>

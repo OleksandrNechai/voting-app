@@ -34,11 +34,22 @@ namespace VotingApp.BLL.Users
         public User RegisterUser(User user)
         {
             var userToSave = user.WithId(Guid.NewGuid()).WithPassword(GetHashForPassword(user.Password));
-            if(GetUsersWithName(userToSave.Name).Any())
+            if (GetUsersWithName(userToSave.Name).Any())
                 throw new ApplicationException("User with such name already exists");
             Repo.Add(userToSave);
             return userToSave;
         }
+
+        public void ChangePassword(Guid id, string oldPassword, string newPassword)
+        {
+            var user = Repo.Find(u => u.Id.Equals(id)).Single();
+            if (user.Password != GetHashForPassword(oldPassword))
+                throw new ApplicationException("Can not update password, because old password is incorrect.");
+            var userToSave = user.WithPassword(GetHashForPassword(newPassword));
+            Repo.Remove(user);
+            Repo.Add(userToSave);
+        }
+
 
         public string GetHashForPassword(string password)
         {
