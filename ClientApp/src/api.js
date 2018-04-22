@@ -61,11 +61,19 @@ function handleJSONResponse(response) {
     if (response.ok) {
       return json;
     } else {
-      return Promise.reject({
-        ...json,
-        status: response.status,
-        statusText: response.statusText,
-      });
+      if (typeof json === 'object') {
+        return Promise.reject({
+          ...json,
+          status: response.status,
+          statusText: response.statusText,
+        });
+      } else {
+        return Promise.reject({
+          message: json,
+          status: response.status,
+          statusText: response.statusText,
+        });
+      }
     }
   });
 }
