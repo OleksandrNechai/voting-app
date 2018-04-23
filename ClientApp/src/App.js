@@ -43,7 +43,7 @@ class App extends Component {
   knownUserRouts = user => (
     <Switch>
       <Route exact path={'/change-password/:id'} component={ChangePassword} />
-      <Route exact path={'/dashboard/:id'} component={Dashboard} />
+      <Route path={'/dashboard/:id'} component={Dashboard} />
       <Redirect to={`/dashboard/${user.id}`} />
     </Switch>
   );

@@ -19,7 +19,10 @@ namespace VotingApp.BLL.Polls
                 .WithId(Guid.NewGuid())
                 .WithOptions(poll.Options
                     .Select(option => option.WithId(Guid.NewGuid())));
-
+            if (string.IsNullOrEmpty(poll.Text))
+                throw new ApplicationException("Poll text can not be empty");
+            if (poll.Options.Any(o => string.IsNullOrEmpty(o.Text)))
+                throw new ApplicationException("No option can have empty text");
             Repo.Add(pollToSave);
             return pollToSave;
         }

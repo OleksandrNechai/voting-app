@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using VotingApp.BLL;
 using VotingApp.BLL.Polls;
@@ -33,7 +34,14 @@ namespace VotingApp.Web.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]Poll poll)
         {
-            return Ok(PollService.CreatePoll(poll));
+            try
+            {
+                return Ok(PollService.CreatePoll(poll));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
         // PUT: api/Polls/5
