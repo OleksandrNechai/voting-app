@@ -24,10 +24,17 @@ namespace VotingApp.Web.Controllers
         }
 
         // GET: api/Polls/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{userId}")]
+        public IActionResult Get(Guid userId)
         {
-            return "poll";
+            try
+            {
+                return Ok(PollService.GetAllPollsOfUser(userId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
         // POST: api/Polls
@@ -52,8 +59,17 @@ namespace VotingApp.Web.Controllers
         
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(Guid id)
         {
+            try
+            {
+                PollService.DeletePoll(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

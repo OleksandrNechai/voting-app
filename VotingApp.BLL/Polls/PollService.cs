@@ -31,5 +31,16 @@ namespace VotingApp.BLL.Polls
         {
             return Repo.All().ToList();
         }
+
+        public List<Poll> GetAllPollsOfUser(Guid userId)
+        {
+            return Repo.Find(poll => poll.UserId.Equals(userId)).ToList();
+        }
+
+        public void DeletePoll(Guid id)
+        {
+            var pollToDelete = Repo.Find(poll => poll.Id.Equals(id)).Single();
+            Repo.Remove(pollToDelete);
+        }
     }
 }
