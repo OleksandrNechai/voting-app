@@ -11,9 +11,14 @@ export default class Poll extends Component {
     userName: '',
     voted: this.props.showChart,
   };
+
   componentDidMount() {
     this.fetchPoll();
-    setInterval(() => this.fetchPoll(), 2000);
+    this.interval = setInterval(() => this.fetchPoll(), 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   fetchPoll = () => {
