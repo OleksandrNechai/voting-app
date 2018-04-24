@@ -44,9 +44,7 @@ export default class PollEditor extends Component {
       })
       .then(savedPoll =>
         this.setState({
-          savedPollUrl: `${window.location.host}/poll/${savedPoll.userId}/${
-            savedPoll.id
-          }`,
+          savedPollUrl: `${window.location.host}/poll/${savedPoll.id}`,
         })
       )
       .catch(error => this.setState({ error: error.message }));

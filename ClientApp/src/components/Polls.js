@@ -42,7 +42,7 @@ export default class Polls extends Component {
                 <h5 className="card-header">{poll.text}</h5>
                 <div className="card-body">
                   <p className="card-text">
-                    {`${window.location.host}/poll/${poll.userId}/${poll.id}`}
+                    {`${window.location.host}/poll/${poll.id}`}
                   </p>
                   <button
                     type="button"
