@@ -10,7 +10,7 @@ export default class Polls extends Component {
     const userId = this.props.match.params.id;
     this.setState({ isLoading: true });
     api
-      .get(`api/polls/${userId}`)
+      .get(`api/polls/user/${userId}`)
       .then(polls => this.setState({ polls }))
       .catch(error => this.setState({ error: error.message }))
       .then(() => this.setState({ isLoading: false }));

@@ -37,6 +37,21 @@ namespace VotingApp.BLL.Polls
             return Repo.Find(poll => poll.UserId.Equals(userId)).ToList();
         }
 
+        public Poll GetPoll(Guid id)
+        {
+            return Repo.Find(p => p.Id.Equals(id)).Single();
+        }
+
+        public void IncrementOption(Guid pollId, Guid optionId)
+        {
+            var poll = Repo.Find(p => p.Id.Equals(pollId)).Single();
+            var pollToSave = poll
+                .WithOptions(poll.Options
+                    .Select(option => option.Id.Equals(optionId) ? option.WithIncrementedCount() : option));
+            Repo.Remove(poll);
+            Repo.Add(pollToSave);
+        }
+
         public void DeletePoll(Guid id)
         {
             var pollToDelete = Repo.Find(poll => poll.Id.Equals(id)).Single();

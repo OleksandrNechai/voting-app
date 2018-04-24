@@ -47,5 +47,14 @@ namespace VotingApp.BLL
                 VotesCount = VotesCount
             };
         }
+        public Option WithIncrementedCount()
+        {
+            return new Option
+            {
+                Id = Id,
+                Text = Text,
+                VotesCount = VotesCount + 1
+            };
+        }
     }
 }

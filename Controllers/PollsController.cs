@@ -23,9 +23,9 @@ namespace VotingApp.Web.Controllers
             return PollService.GetAllPolls();
         }
 
-        // GET: api/Polls/5
-        [HttpGet("{userId}")]
-        public IActionResult Get(Guid userId)
+        // GET: api/Polls/user/5
+        [HttpGet("user/{userId}")]
+        public IActionResult GetByUser(Guid userId)
         {
             try
             {
@@ -36,7 +36,21 @@ namespace VotingApp.Web.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
+        // GET: api/Polls/5
+        [HttpGet("{id}")]
+        public IActionResult Get(Guid id)
+        {
+            try
+            {
+                return Ok(PollService.GetPoll(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // POST: api/Polls
         [HttpPost]
         public IActionResult Post([FromBody]Poll poll)
@@ -52,9 +66,18 @@ namespace VotingApp.Web.Controllers
         }
         
         // PUT: api/Polls/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPut("{pollId}/{optionId}")]
+        public IActionResult Put(Guid pollId, Guid optionId)
         {
+            try
+            {
+                PollService.IncrementOption(pollId, optionId);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         
         // DELETE: api/ApiWithActions/5

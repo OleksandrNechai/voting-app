@@ -8,6 +8,7 @@ import Login from './auth/Login';
 import { withRouter } from 'react-router-dom';
 import * as api from './api';
 import ChangePassword from './components/ChangePassword';
+import Poll from './components/Poll';
 
 class App extends Component {
   displayName = App.name;
@@ -44,9 +45,12 @@ class App extends Component {
     <Switch>
       <Route exact path={'/change-password/:id'} component={ChangePassword} />
       <Route path={'/dashboard/:id'} component={Dashboard} />
+      {this.indifferentRouts()}
       <Redirect to={`/dashboard/${user.id}`} />
     </Switch>
   );
+
+  indifferentRouts = () => <Route exact path={'/poll/:id'} component={Poll} />;
 
   anonymousUserRouts = () => (
     <Switch>
@@ -61,6 +65,7 @@ class App extends Component {
         render={() => <SignUp onUserLoggedIn={this.handleLogin} />}
       />
       <Route exact path="/" component={Home} />
+      {this.indifferentRouts()}
       <Redirect to="/" />
     </Switch>
   );

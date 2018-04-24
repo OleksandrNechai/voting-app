@@ -8,6 +8,8 @@ namespace VotingApp.BLL.Polls
         Poll CreatePoll(Poll poll);
         List<Poll> GetAllPolls();
         List<Poll> GetAllPollsOfUser(Guid userId);
+        Poll GetPoll(Guid id);
+        void IncrementOption(Guid pollId, Guid optionId);
         void DeletePoll(Guid id);
     }
 }
