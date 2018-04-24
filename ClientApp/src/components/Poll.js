@@ -13,6 +13,7 @@ export default class Poll extends Component {
   };
   componentDidMount() {
     this.fetchPoll();
+    setInterval(() => this.fetchPoll(), 2000);
   }
 
   fetchPoll = () => {
@@ -21,10 +22,12 @@ export default class Poll extends Component {
       .get(`api/polls/${id}`)
       .then(poll => {
         this.setState({ poll });
-        api
-          .get(`api/users/${poll.userId}`)
-          .then(user => this.setState({ userName: user.name }))
-          .catch(error => this.setState({ error: error.message }));
+        if (!this.state.userName) {
+          api
+            .get(`api/users/${poll.userId}`)
+            .then(user => this.setState({ userName: user.name }))
+            .catch(error => this.setState({ error: error.message }));
+        }
       })
       .catch(error => this.setState({ error: error.message }));
   };
