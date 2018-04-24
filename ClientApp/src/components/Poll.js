@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import * as api from '../api';
+import ReactChartkick, { ColumnChart } from 'react-chartkick';
+import Chart from 'chart.js';
+ReactChartkick.addAdapter(Chart);
 
 export default class Poll extends Component {
-  state = { error: '', poll: undefined, userName: '', voted: false };
+  state = {
+    error: '',
+    poll: undefined,
+    userName: '',
+    voted: this.props.showChart,
+  };
   componentDidMount() {
     this.fetchPoll();
   }
@@ -44,11 +52,12 @@ export default class Poll extends Component {
           voted ? (
             <div>
               <h1>{poll.text}</h1>
-              {poll.options.map(option => (
-                <div key={option.id}>
-                  {option.text} ({option.votesCount})
-                </div>
-              ))}
+              <ColumnChart
+                data={poll.options.map(option => [
+                  option.text,
+                  option.votesCount,
+                ])}
+              />
             </div>
           ) : (
             <div className="mt-4">

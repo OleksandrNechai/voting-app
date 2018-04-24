@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import * as api from '../api';
+import Poll from './Poll';
 
 export default class Polls extends Component {
-  state = { polls: [], error: '', isLoading: true };
+  state = { polls: [], error: '', isLoading: true, selectedPoll: undefined };
   componentDidMount() {
     this.fetchPolls();
   }
@@ -23,8 +24,18 @@ export default class Polls extends Component {
       .catch(error => this.setState({ error: error.message }))
       .then(() => this.setState({ isLoading: false }));
   };
+  handleShowResults = pollId => {
+    this.setState({
+      selectedPoll: this.state.polls.filter(p => p.id === pollId)[0],
+    });
+  };
+  handleBack = () => {
+    this.setState({
+      selectedPoll: undefined,
+    });
+  };
   render() {
-    const { polls, error, isLoading } = this.state;
+    const { polls, error, isLoading, selectedPoll } = this.state;
     return (
       <div className="mt-4">
         <h2>My Polls</h2>
@@ -35,6 +46,17 @@ export default class Polls extends Component {
         ) : null}
         {isLoading ? (
           'Loading...'
+        ) : selectedPoll ? (
+          <div className="mt-4">
+            <Poll match={{ params: { id: selectedPoll.id } }} showChart />
+            <button
+              type="button"
+              className="btn btn-primary btn-lg mt-4"
+              onClick={() => this.handleBack()}
+            >
+              Back
+            </button>
+          </div>
         ) : polls.length > 0 ? (
           <ul className="list-group mt-4" style={{ textAlign: 'left' }}>
             {polls.map(poll => (
@@ -50,6 +72,13 @@ export default class Polls extends Component {
                     onClick={() => this.handleDelete(poll.id)}
                   >
                     Delete
+                  </button>{' '}
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => this.handleShowResults(poll.id)}
+                  >
+                    Show Results
                   </button>
                 </div>
               </div>
